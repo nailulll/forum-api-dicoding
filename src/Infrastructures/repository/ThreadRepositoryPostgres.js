@@ -1,6 +1,5 @@
 const ThreadRepository = require("../../Domains/threads/ThreadRepository");
-const {nanoid} = require("nanoid");
-const CreatedThread = require("../../Domains/threads/entitites/CreatedThread");
+const CreatedThread = require("../../Domains/threads/entities/CreatedThread");
 
 class ThreadRepositoryPostgres extends ThreadRepository {
     constructor(pool, idGenerator) {
@@ -18,6 +17,7 @@ class ThreadRepositoryPostgres extends ThreadRepository {
                    VALUES ($1, $2, $3, $4, $5) RETURNING id, title, owner`,
             values: [id, title, body, userId, date],
         };
+
 
         const result = await this._pool.query(query);
 

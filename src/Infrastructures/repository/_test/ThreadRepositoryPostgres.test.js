@@ -1,8 +1,8 @@
 const pool = require("../../database/postgres/pool");
 const ThreadRepositoryTestHelper = require("../../../../tests/ThreadTableTestHelper");
-const CreateThread = require("../../../Domains/threads/entitites/CreateThread");
+const CreateThread = require("../../../Domains/threads/entities/CreateThread");
 const ThreadRepositoryPostgres = require("../ThreadRepositoryPostgres");
-const CreatedThread = require("../../../Domains/threads/entitites/CreatedThread");
+const CreatedThread = require("../../../Domains/threads/entities/CreatedThread");
 const UsersTableTestHelper = require("../../../../tests/UsersTableTestHelper");
 
 describe("ThreadRepositoryPostgres", () => {
