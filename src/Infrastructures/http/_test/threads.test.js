@@ -14,44 +14,82 @@ describe("/threads endpoint", () => {
         await pool.end();
     });
 
+    const addUserAndLogin = async (server) => {
+        await server.inject({
+            method: 'POST',
+            url: '/users',
+            payload: {
+                username: 'dicoding',
+                password: 'secret',
+                fullname: 'Dicoding Indonesia',
+            },
+        });
+
+        const loginResponse = await server.inject({
+            method: 'POST',
+            url: '/authentications',
+            payload: {
+                username: 'dicoding',
+                password: 'secret',
+            },
+        });
+
+        return JSON.parse(loginResponse.payload).data.accessToken;
+    };
+
     describe("when POST /threads", () => {
-        it("should response 201 and persisted thread", async () => {
-            await UsersTableTestHelper.addUser({
-                id: 'user-1234',
-                username: 'dicoding4',
-                password: 'secret4',
-                fullname: 'Dicoding Indonesia 4',
+        let server;
+
+        beforeEach(async () => {
+            server = await createServer(container);
+        });
+
+        it("should response 400 when request payload not contain needed property", async () => {
+            const accessToken = await addUserAndLogin(server);
+
+            const response = await server.inject({
+                method: "POST",
+                url: "/threads",
+                payload: {},
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
             });
 
+            const responseJson = JSON.parse(response.payload);
+            expect(response.statusCode).toEqual(400);
+            expect(responseJson.status).toEqual('fail');
+            expect(responseJson.message).toEqual('tidak dapat membuat thread karena properti yang dibutuhkan tidak ada');
+        });
+
+        it("should response 400 when request payload not meet data type specification", async () => {
+            const accessToken = await addUserAndLogin(server);
+            const requestPayload = {
+                title: "title",
+                body: 123,
+            };
+
+            const response = await server.inject({
+                method: "POST",
+                url: "/threads",
+                payload: requestPayload,
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            });
+
+            const responseJson = JSON.parse(response.payload);
+            expect(response.statusCode).toEqual(400);
+            expect(responseJson.status).toEqual('fail');
+            expect(responseJson.message).toEqual('tidak dapat membuat thread karena tipe data tidak sesuai');
+        });
+
+        it("should response 201 and persisted thread", async () => {
+            const accessToken = await addUserAndLogin(server);
             const requestPayload = {
                 title: "title",
                 body: "body",
             };
-
-            const server = await createServer(container);
-
-            // add user
-            const responseUser = await server.inject({
-                method: 'POST',
-                url: '/users',
-                payload: {
-                    username: 'dicoding',
-                    password: 'secret',
-                    fullname: 'Dicoding Indonesia',
-                },
-            });
-
-            // login user
-            const loginResponse = await server.inject({
-                method: 'POST',
-                url: '/authentications',
-                payload: {
-                    username: 'dicoding',
-                    password: 'secret',
-                },
-            });
-
-            const {data: {accessToken}} = JSON.parse(loginResponse.payload);
 
             const response = await server.inject({
                 method: "POST",
@@ -66,9 +104,6 @@ describe("/threads endpoint", () => {
             expect(response.statusCode).toEqual(201);
             expect(responseJson.status).toEqual('success');
             expect(responseJson.data.addedThread).toBeDefined();
-
-            expect(1).toBe(1);
         });
     });
-
 });
