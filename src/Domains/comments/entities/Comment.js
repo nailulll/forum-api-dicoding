@@ -5,18 +5,27 @@ class Comment {
         this.id = payload.id;
         this.content = payload.content;
         this.date = payload.date;
-        this.owner = payload.owner;
+        this.username = payload.username;
+        this.replies = payload.replies || [];
     }
 
     _verifyPayload(payload) {
-        const {id, content, date, owner} = payload;
+        const {id, content, date, username, replies} = payload;
 
-        if (!id || !content || !date || !owner) {
+        if (!id || !content || !date || !username) {
             throw new Error('COMMENT.NOT_CONTAIN_NEEDED_PROPERTY');
         }
 
-        if (typeof id !== 'string' || typeof content !== 'string' || typeof date !== 'string' || typeof owner !== 'string') {
+        if (typeof id !== 'string' || typeof content !== 'string' || typeof date !== 'string' || typeof username !== 'string') {
             throw new Error('COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION');
+        }
+
+        if (replies && !Array.isArray(payload.replies)) {
+            throw new Error('COMMENT.REPLIES_NOT_ARRAY');
+        }
+
+        if (replies && !replies.every(reply => reply instanceof Comment)) {
+            throw new Error('COMMENT.REPLIES_NOT_ARRAY_OF_COMMENT');
         }
     }
 }

@@ -34,7 +34,7 @@ describe("Thread entity", () => {
         };
 
         // Action & Assert
-        expect(() => new Thread(payload)).toThrowError('THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
+        expect(() => new Thread(payload)).toThrowError('THREAD.COMMENTS_NOT_ARRAY_OF_COMMENT');
     });
 
     it("should create Thread entities correctly", () => {
@@ -43,7 +43,7 @@ describe("Thread entity", () => {
             id: "comment-123",
             content: "content",
             date: "date",
-            owner: "username",
+            username: "username",
         });
 
         // Arrange
@@ -70,7 +70,7 @@ describe("Thread entity", () => {
         expect(thread.comments[0].id).toEqual(comment.id);
         expect(thread.comments[0].content).toEqual(comment.content);
         expect(thread.comments[0].date).toEqual(comment.date);
-        expect(thread.comments[0].owner).toEqual(comment.owner);
+        expect(thread.comments[0].username).toEqual(comment.username);
 
     });
 });

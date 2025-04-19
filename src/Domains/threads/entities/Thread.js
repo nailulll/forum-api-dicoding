@@ -24,7 +24,7 @@ class Thread {
         }
 
         if (!Array.isArray(comments) || !comments.every(comment => comment instanceof Comment)) {
-            throw new Error('THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
+            throw new Error('THREAD.COMMENTS_NOT_ARRAY_OF_COMMENT');
         }
     }
 }

@@ -10,6 +10,10 @@ exports.up = pgm => {
             type: 'VARCHAR(50)',
             notNull: true,
         },
+        parent_id: {
+            type: 'VARCHAR(50)',
+            notNull: false,
+        },
         content: {
             type: 'TEXT',
             notNull: true,
