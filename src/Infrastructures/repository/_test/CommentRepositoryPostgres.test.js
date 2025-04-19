@@ -7,7 +7,7 @@ const CreatedComment = require("../../../Domains/comments/entities/CreatedCommen
 const AddedReply = require("../../../Domains/comments/entities/AddedReply");
 
 describe("CommentRepositoryPostgres", () => {
-    const fakeIdGenerator = () => new Date().getTime().toString();
+    const fakeIdGenerator = () => '123';
     const fakeUserId = 'user-123';
     const fakeThreadId = 'thread-123';
     const payload = {content: 'content'};
@@ -86,6 +86,8 @@ describe("CommentRepositoryPostgres", () => {
                 thread_id: fakeThreadId,
                 owner: fakeUserId
             });
+            const idGenerator = () => new Date().toISOString();
+            const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, idGenerator);
             const replyComment = await commentRepositoryPostgres.replyComment(payload, commentId, fakeThreadId, fakeUserId);
             const replyCommentById = await CommentTableTestHelper.findCommentsById(replyComment.id);
             await expect(replyComment).toStrictEqual(new AddedReply({
