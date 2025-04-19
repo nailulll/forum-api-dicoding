@@ -4,9 +4,10 @@ const CommentTableTestHelper = require("../../../../tests/CommentTableTestHelper
 const pool = require("../../database/postgres/pool");
 const CommentRepositoryPostgres = require("../CommentRepositoryPostgres");
 const CreatedComment = require("../../../Domains/comments/entities/CreatedComment");
+const AddedReply = require("../../../Domains/comments/entities/AddedReply");
 
 describe("CommentRepositoryPostgres", () => {
-    const fakeIdGenerator = () => '123';
+    const fakeIdGenerator = () => new Date().getTime().toString();
     const fakeUserId = 'user-123';
     const fakeThreadId = 'thread-123';
     const payload = {content: 'content'};
@@ -74,6 +75,24 @@ describe("CommentRepositoryPostgres", () => {
             await commentRepositoryPostgres.addComment(payload, fakeThreadId, fakeUserId);
             await UsersTableTestHelper.addUser({id: fakeSecondUserId, username: "dicoding456"});
             await expect(commentRepositoryPostgres.verifyCommentOwner('comment-123', fakeSecondUserId)).rejects.toThrowError('anda tidak berhak mengakses resource ini');
+        });
+    });
+
+    describe("replyComment function", () => {
+        it("should reply comment correctly", async () => {
+            const commentId = 'comment-123';
+            await CommentTableTestHelper.addComment({
+                id: commentId,
+                thread_id: fakeThreadId,
+                owner: fakeUserId
+            });
+            const replyComment = await commentRepositoryPostgres.replyComment(payload, commentId, fakeThreadId, fakeUserId);
+            const replyCommentById = await CommentTableTestHelper.findCommentsById(replyComment.id);
+            await expect(replyComment).toStrictEqual(new AddedReply({
+                id: replyCommentById[0].id,
+                content: replyCommentById[0].content,
+                owner: replyCommentById[0].owner,
+            }));
         });
     });
 });

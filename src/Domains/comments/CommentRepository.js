@@ -14,6 +14,10 @@ class CommentRepository {
     async verifyCommentOwner(commentId, userId) {
         throw new Error('COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
     }
+
+    async replyComment(comment, commentId, threadId, userId) {
+        throw new Error('COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+    }
 }
 
 module.exports = CommentRepository;

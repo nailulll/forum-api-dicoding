@@ -2,6 +2,7 @@ const CommentRepository = require("../../Domains/comments/CommentRepository");
 const CreatedComment = require("../../Domains/comments/entities/CreatedComment");
 const NotFoundError = require("../../Commons/exceptions/NotFoundError");
 const AuthorizationError = require("../../Commons/exceptions/AuthorizationError");
+const AddedReply = require("../../Domains/comments/entities/AddedReply");
 
 class CommentRepositoryPostgres extends CommentRepository {
 
@@ -59,6 +60,21 @@ class CommentRepositoryPostgres extends CommentRepository {
         }
 
         return result.rows[0];
+    }
+
+    async replyComment(comment, commentId, threadId, userId) {
+        const {content} = comment;
+        const id = `comment-${this._idGenerator()}`;
+        const date = new Date().toISOString();
+
+        const query = {
+            text: `INSERT INTO comments
+                   VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id, content, owner`,
+            values: [id, threadId, commentId, content, userId, date, false],
+        };
+        const result = await this._pool.query(query);
+
+        return new AddedReply({...result.rows[0]});
     }
 }
 
