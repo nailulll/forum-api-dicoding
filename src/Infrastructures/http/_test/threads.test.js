@@ -45,6 +45,23 @@ describe("/threads endpoint", () => {
             server = await createServer(container);
         });
 
+        it("should response 401 when request not contain access token", async () => {
+            const response = await server.inject({
+                method: "POST",
+                url: "/threads",
+                payload: {
+                    title: "title",
+                    body: "body",
+                },
+            });
+
+            const responseJson = JSON.parse(response.payload);
+
+            expect(response.statusCode).toEqual(401);
+            expect(responseJson.error).toEqual('Unauthorized');
+            expect(responseJson.message).toEqual('Missing authentication');
+        });
+
         it("should response 400 when request payload not contain needed property", async () => {
             const accessToken = await addUserAndLogin(server);
 

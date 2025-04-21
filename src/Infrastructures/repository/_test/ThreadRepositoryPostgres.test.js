@@ -102,6 +102,21 @@ describe("ThreadRepositoryPostgres", () => {
 
             await CommentsTableTestHelper.deleteCommentById(commentUserDicoding.id);
 
+
+            await CommentsTableTestHelper.replyComment({
+                ...commentUserJohnDoe,
+                commentId: commentUserJohnDoe.id,
+                id: 'comment-789',
+            });
+            await CommentsTableTestHelper.replyComment({
+                ...commentUserJohnDoe,
+                commentId: commentUserJohnDoe.id,
+                id: 'comment-890',
+            });
+
+            await CommentsTableTestHelper.deleteCommentById('comment-890');
+
+
             const fakeIdGenerator = () => '123';
             const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, fakeIdGenerator);
             const threadDetail = await threadRepositoryPostgres.detailThread(thread.id);
@@ -112,16 +127,33 @@ describe("ThreadRepositoryPostgres", () => {
                 title: thread.title,
                 body: thread.body,
                 username: userDicoding.username,
+                date: expect.any(String),
                 comments: expect.arrayContaining([
                     expect.objectContaining({
                         id: commentUserJohnDoe.id,
                         content: commentUserJohnDoe.content,
                         username: userJohnDoe.username,
+                        date: expect.any(String),
+                        replies: [
+                            expect.objectContaining({
+                                id: 'comment-789',
+                                content: commentUserJohnDoe.content,
+                                username: userJohnDoe.username,
+                                date: expect.any(String),
+                            }),
+                            expect.objectContaining({
+                                id: 'comment-890',
+                                content: "**balasan telah dihapus**",
+                                username: userJohnDoe.username,
+                                date: expect.any(String),
+                            }),
+                        ],
                     }),
                     expect.objectContaining({
                         id: commentUserDicoding.id,
                         content: "**komentar telah dihapus**",
                         username: userDicoding.username,
+                        date: expect.any(String),
                     }),
                 ]),
             });

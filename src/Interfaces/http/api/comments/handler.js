@@ -1,5 +1,6 @@
 const AddCommentUseCase = require("../../../../Applications/use_case/AddCommentUseCase");
 const DeleteCommentOnThreadUseCase = require("../../../../Applications/use_case/DeleteCommentOnThreadUseCase");
+const ReplyThreadUseCase = require("../../../../Applications/use_case/ReplyThreadUseCase");
 
 class CommentHandler {
     constructor(container) {
@@ -31,6 +32,21 @@ class CommentHandler {
             message: 'Komentar berhasil dihapus',
         });
         response.code(200);
+        return response;
+    }
+
+    async replyCommentHandler(request, h) {
+        const {commentId, threadId} = request.params;
+        const {id: userId} = request.auth.credentials;
+        const replyThreadUseCase = this._container.getInstance(ReplyThreadUseCase.name);
+        const addedReply = await replyThreadUseCase.execute(request.payload, commentId, threadId, userId);
+        const response = h.response({
+            status: 'success',
+            data: {
+                addedReply,
+            },
+        });
+        response.code(201);
         return response;
     }
 }
