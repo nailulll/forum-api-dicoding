@@ -1,14 +1,14 @@
 /* eslint-disable camelcase */
 
 exports.up = pgm => {
-    pgm.createTable('comments', {
+    pgm.createTable('replies', {
         id: {
             type: 'VARCHAR(50)',
             primaryKey: true,
         },
-        thread_id: {
+        comment_id: {
             type: 'VARCHAR(50)',
-            notNull: true,
+            notNull: false,
         },
         content: {
             type: 'TEXT',
@@ -27,14 +27,14 @@ exports.up = pgm => {
             notNull: true,
         },
     });
-    pgm.addConstraint('comments', 'fk_comments.thread_id_threads.id', {
+    pgm.addConstraint('replies', 'fk_replies.comment_id_threads.id', {
         foreignKeys: {
-            columns: 'thread_id',
-            references: 'threads(id)',
+            columns: 'comment_id',
+            references: 'comments(id)',
             onDelete: 'CASCADE',
         },
     });
-    pgm.addConstraint('comments', 'fk_comments.owner_users.id', {
+    pgm.addConstraint('replies', 'fk_replies.owner_users.id', {
         foreignKeys: {
             columns: 'owner',
             references: 'users(id)',
@@ -44,5 +44,5 @@ exports.up = pgm => {
 };
 
 exports.down = pgm => {
-    pgm.dropTable('comments');
+    pgm.dropTable('replies');
 };
