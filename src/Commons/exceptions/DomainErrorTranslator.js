@@ -23,6 +23,7 @@ DomainErrorTranslator._directories = {
   // comment
   'CREATE_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('tidak dapat membuat komentar karena properti yang dibutuhkan tidak ada'),
   'CREATE_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('tidak dapat membuat komentar karena tipe data tidak sesuai'),
+  // reply
   'REPLY_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('tidak dapat membuat balasan komentar karena properti yang dibutuhkan tidak ada'),
   'REPLY_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('tidak dapat membuat balasan komentar karena tipe data tidak sesuai'),
 };

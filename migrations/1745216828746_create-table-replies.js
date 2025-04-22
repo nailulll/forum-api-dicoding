@@ -27,7 +27,7 @@ exports.up = pgm => {
             notNull: true,
         },
     });
-    pgm.addConstraint('replies', 'fk_replies.comment_id_threads.id', {
+    pgm.addConstraint('replies', 'fk_replies.comment_id_comments.id', {
         foreignKeys: {
             columns: 'comment_id',
             references: 'comments(id)',

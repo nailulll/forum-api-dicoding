@@ -1,3 +1,5 @@
+const Reply = require("../../replies/entities/Reply");
+
 class Comment {
     constructor(payload) {
         this._verifyPayload(payload);
@@ -24,8 +26,8 @@ class Comment {
             throw new Error('COMMENT.REPLIES_NOT_ARRAY');
         }
 
-        if (replies && !replies.every(reply => reply instanceof Comment)) {
-            throw new Error('COMMENT.REPLIES_NOT_ARRAY_OF_COMMENT');
+        if (replies && !replies.every(reply => reply instanceof Reply)) {
+            throw new Error('COMMENT.REPLIES_NOT_ARRAY_OF_REPLY');
         }
     }
 }

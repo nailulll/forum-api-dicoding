@@ -1,4 +1,5 @@
 const Comment = require("../Comment");
+const Reply = require("../../../replies/entities/Reply");
 
 describe("Comment entity", () => {
     it("should throw error when payload does not contain needed property", () => {
@@ -44,12 +45,12 @@ describe("Comment entity", () => {
         };
 
         // Action & Assert
-        expect(() => new Comment(payload)).toThrowError('COMMENT.REPLIES_NOT_ARRAY_OF_COMMENT');
+        expect(() => new Comment(payload)).toThrowError('COMMENT.REPLIES_NOT_ARRAY_OF_REPLY');
     });
 
     it("should create Comment entities correctly", () => {
         // Arrange
-        const payloadComment = new Comment({
+        const payloadComment = new Reply({
             id: "comment-123",
             content: "content",
             date: "2021-01-01",

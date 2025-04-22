@@ -3,6 +3,7 @@ const CreatedThread = require("../../Domains/threads/entities/CreatedThread");
 const NotFoundError = require("../../Commons/exceptions/NotFoundError");
 const Thread = require("../../Domains/threads/entities/Thread");
 const Comment = require("../../Domains/comments/entities/Comment");
+const Reply = require("../../Domains/replies/entities/Reply");
 
 class ThreadRepositoryPostgres extends ThreadRepository {
     constructor(pool, idGenerator) {
@@ -64,33 +65,37 @@ class ThreadRepositoryPostgres extends ThreadRepository {
                 FROM comments c
                          JOIN users u ON c.owner = u.id
                 WHERE c.thread_id = $1
-                  AND c.parent_id IS NULL
                 ORDER BY c.date
             `,
             values: [threadId],
         };
         const commentsResult = await this._pool.query(commentsQuery);
+        const commentIds = commentsResult.rows.map(c => c.id);
 
         const repliesQuery = {
             text: `
-                SELECT c.id, c.content, c.date, c.is_delete, c.parent_id, u.username
-                FROM comments c
-                         JOIN users u ON c.owner = u.id
-                WHERE c.thread_id = $1
-                  AND c.parent_id IS NOT NULL
-                ORDER BY c.date
+                SELECT r.id, r.content, r.date, r.is_delete, r.comment_id, u.username
+                FROM replies r
+                         JOIN users u ON r.owner = u.id
+                WHERE r.comment_id = ANY ($1::text[])
+                ORDER BY r.date
             `,
-            values: [threadId],
+            values: [commentIds],
         };
         const repliesResult = await this._pool.query(repliesQuery);
-        const replies = repliesResult.rows;
 
-        const comments = commentsResult.rows.map((comment) => {
+        const replies = repliesResult.rows.map(reply => ({
+            ...reply,
+            content: reply.is_delete ? '**balasan telah dihapus**' : reply.content,
+        }));
+
+
+        const comments = commentsResult.rows.map(comment => {
             const nestedReplies = replies
-                .filter((reply) => reply.parent_id === comment.id)
-                .map((reply) => new Comment({
+                .filter(reply => reply.comment_id === comment.id)
+                .map(reply => new Reply({
                     id: reply.id,
-                    content: reply.is_delete ? '**balasan telah dihapus**' : reply.content,
+                    content: reply.content,
                     date: reply.date,
                     username: reply.username,
                 }));
@@ -113,6 +118,7 @@ class ThreadRepositoryPostgres extends ThreadRepository {
             comments,
         });
     }
+
 }
 
 module.exports = ThreadRepositoryPostgres;

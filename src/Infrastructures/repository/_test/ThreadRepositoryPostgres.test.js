@@ -5,12 +5,14 @@ const ThreadRepositoryPostgres = require("../ThreadRepositoryPostgres");
 const CreatedThread = require("../../../Domains/threads/entities/CreatedThread");
 const UsersTableTestHelper = require("../../../../tests/UsersTableTestHelper");
 const CommentsTableTestHelper = require("../../../../tests/CommentTableTestHelper");
+const ReplyTableTestHelper = require("../../../../tests/ReplyTableTestHelper");
 
 describe("ThreadRepositoryPostgres", () => {
     afterEach(async () => {
         await ThreadRepositoryTestHelper.cleanTable();
         await UsersTableTestHelper.cleanTable();
         await CommentsTableTestHelper.cleanTable();
+        await ReplyTableTestHelper.cleanTable();
     });
 
     afterAll(async () => {
@@ -102,27 +104,29 @@ describe("ThreadRepositoryPostgres", () => {
 
             await CommentsTableTestHelper.deleteCommentById(commentUserDicoding.id);
 
+            const replyId1 = 'reply-123';
+            const replyId2 = 'reply-456';
 
-            await CommentsTableTestHelper.replyComment({
+            await ReplyTableTestHelper.addReply({
                 ...commentUserJohnDoe,
                 commentId: commentUserJohnDoe.id,
-                id: 'comment-789',
+                id: replyId1,
             });
-            await CommentsTableTestHelper.replyComment({
+
+            await ReplyTableTestHelper.addReply({
                 ...commentUserJohnDoe,
                 commentId: commentUserJohnDoe.id,
-                id: 'comment-890',
+                id: replyId2,
             });
 
-            await CommentsTableTestHelper.deleteCommentById('comment-890');
-
+            await ReplyTableTestHelper.deleteReplyById(replyId2);
 
             const fakeIdGenerator = () => '123';
             const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, fakeIdGenerator);
             const threadDetail = await threadRepositoryPostgres.detailThread(thread.id);
 
             expect(threadDetail).toBeDefined();
-            expect(threadDetail).toMatchObject({
+            expect(JSON.parse(JSON.stringify(threadDetail))).toMatchObject({
                 id: thread.id,
                 title: thread.title,
                 body: thread.body,
@@ -136,13 +140,13 @@ describe("ThreadRepositoryPostgres", () => {
                         date: expect.any(String),
                         replies: [
                             expect.objectContaining({
-                                id: 'comment-789',
+                                id: replyId1,
                                 content: commentUserJohnDoe.content,
                                 username: userJohnDoe.username,
                                 date: expect.any(String),
                             }),
                             expect.objectContaining({
-                                id: 'comment-890',
+                                id: replyId2,
                                 content: "**balasan telah dihapus**",
                                 username: userJohnDoe.username,
                                 date: expect.any(String),
