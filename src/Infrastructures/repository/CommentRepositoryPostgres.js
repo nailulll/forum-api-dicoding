@@ -2,7 +2,6 @@ const CommentRepository = require("../../Domains/comments/CommentRepository");
 const CreatedComment = require("../../Domains/comments/entities/CreatedComment");
 const NotFoundError = require("../../Commons/exceptions/NotFoundError");
 const AuthorizationError = require("../../Commons/exceptions/AuthorizationError");
-const AddedReply = require("../../Domains/replies/entities/AddedReply");
 
 class CommentRepositoryPostgres extends CommentRepository {
 
@@ -38,7 +37,7 @@ class CommentRepositoryPostgres extends CommentRepository {
 
     async findCommentById(threadId) {
         const query = {
-            text: 'SELECT * FROM comments WHERE id = $1 AND is_delete = false',
+            text: 'SELECT * FROM comments WHERE id = $1',
             values: [threadId],
         };
         const result = await this._pool.query(query);

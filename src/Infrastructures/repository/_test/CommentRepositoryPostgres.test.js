@@ -70,7 +70,7 @@ describe("CommentRepositoryPostgres", () => {
             await expect(comment).toStrictEqual(commentById[0]);
         });
 
-        it("should throw AuthorizationError when comment not found", async () => {
+        it("should throw AuthorizationError when comment not owner", async () => {
             const fakeSecondUserId = 'user-456';
             await commentRepositoryPostgres.addComment(payload, fakeThreadId, fakeUserId);
             await UsersTableTestHelper.addUser({id: fakeSecondUserId, username: "dicoding456"});

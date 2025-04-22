@@ -1,4 +1,5 @@
 const ReplyThreadUseCase = require("../../../../Applications/use_case/ReplyThreadUseCase");
+const DeleteReplyUseCase = require("../../../../Applications/use_case/DeleteReplyUseCase");
 
 class RepliesHandler {
 
@@ -18,6 +19,19 @@ class RepliesHandler {
             },
         });
         response.code(201);
+        return response;
+    }
+
+    async deleteReplyHandler(request, h) {
+        const {replyId, threadId, commentId} = request.params;
+        const {id: userId} = request.auth.credentials;
+        const deleteReplyUseCase = this._container.getInstance(DeleteReplyUseCase.name);
+        await deleteReplyUseCase.execute(replyId, commentId, threadId, userId);
+        const response = h.response({
+            status: 'success',
+            message: 'Balasan berhasil dihapus',
+        });
+        response.code(200);
         return response;
     }
 }

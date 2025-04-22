@@ -8,5 +8,7 @@ describe("ReplyRepository interface", () => {
         // Action & Assert
         await expect(replyRepository.addReply({}, null, null)).rejects.toThrowError("REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED");
         await expect(replyRepository.deleteReply(null)).rejects.toThrowError("REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED");
-    });
+        await expect(replyRepository.findReplyById(null)).rejects.toThrowError("REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED");
+        await expect(replyRepository.verifyReplyOwner(null, null)).rejects.toThrowError("REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED");
+    })
 });

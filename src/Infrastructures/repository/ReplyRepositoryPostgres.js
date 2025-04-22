@@ -1,5 +1,7 @@
 const AddedReply = require("../../Domains/replies/entities/AddedReply");
 const ReplyRepository = require("../../Domains/replies/ReplyRepository");
+const AuthorizationError = require("../../Commons/exceptions/AuthorizationError");
+const NotFoundError = require("../../Commons/exceptions/NotFoundError");
 
 class ReplyRepositoryPostgres extends ReplyRepository {
     constructor(pool, idGenerator) {
@@ -24,7 +26,39 @@ class ReplyRepositoryPostgres extends ReplyRepository {
     }
 
     async deleteReply(replyId) {
+        const query = {
+            text: 'UPDATE replies SET is_delete = true WHERE id = $1',
+            values: [replyId],
+        };
 
+        await this._pool.query(query);
+    }
+
+    async verifyReplyOwner(replyId, userId) {
+        const query = {
+            text: 'SELECT * FROM replies WHERE id = $1 AND owner = $2',
+            values: [replyId, userId],
+        };
+        const result = await this._pool.query(query);
+        if (!result.rows.length) {
+            throw new AuthorizationError('anda tidak berhak mengakses resource ini');
+        }
+
+        return result.rows[0];
+    }
+
+    async findReplyById(replyId) {
+        const query = {
+            text: 'SELECT * FROM replies WHERE id = $1',
+            values: [replyId],
+        };
+        const result = await this._pool.query(query);
+
+        if (!result.rows.length) {
+            throw new NotFoundError('balasan tidak ditemukan');
+        }
+
+        return result.rows[0];
     }
 
 }
