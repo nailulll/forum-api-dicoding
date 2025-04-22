@@ -167,7 +167,7 @@ describe("comments endpoint", () => {
 
     });
 
-    describe("when POST /threads/{threadId}/comments/{commentId}", () => {
+    describe("when DELETE /threads/{threadId}/comments/{commentId}", () => {
 
         it("should response 401 when request not contain access token", async () => {
             const server = await createServer(container);
