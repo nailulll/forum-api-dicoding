@@ -3,34 +3,35 @@ const Comment = require("../../../Domains/comments/entities/Comment");
 const ThreadRepository = require("../../../Domains/threads/ThreadRepository");
 const DetailThreadUseCase = require("../DetailThreadUseCase");
 
-
 describe("DetailThreadUseCase", () => {
-    it("should orchestrating the add thread action correctly", async () => {
-        const mockThread = new Thread({
-            id: "thread-123",
-            title: "title",
-            body: "body",
-            date: "date",
-            username: "username",
-            comments: [
-                new Comment({
-                    id: "comment-123",
-                    content: "content",
-                    date: "date",
-                    username: "username",
-                }),
-            ],
-        });
-
-        const mockThreadRepository = new ThreadRepository();
-        mockThreadRepository.detailThread = jest.fn().mockImplementation(() => Promise.resolve(mockThread));
-
-        const detailThreadUseCase = new DetailThreadUseCase({
-            threadRepository: mockThreadRepository,
-        });
-        const thread = await detailThreadUseCase.execute("thread-123");
-
-        expect(mockThreadRepository.detailThread).toBeCalledWith("thread-123");
-        expect(thread).toStrictEqual(mockThread);
+  it("should orchestrating the add thread action correctly", async () => {
+    const mockThread = new Thread({
+      id: "thread-123",
+      title: "title",
+      body: "body",
+      date: "date",
+      username: "username",
+      comments: [
+        new Comment({
+          id: "comment-123",
+          content: "content",
+          date: "date",
+          username: "username",
+        }),
+      ],
     });
+
+    const mockThreadRepository = new ThreadRepository();
+    mockThreadRepository.detailThread = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve(mockThread));
+
+    const detailThreadUseCase = new DetailThreadUseCase({
+      threadRepository: mockThreadRepository,
+    });
+    const thread = await detailThreadUseCase.execute("thread-123");
+
+    expect(mockThreadRepository.detailThread).toBeCalledWith("thread-123");
+    expect(thread).toStrictEqual(mockThread);
+  });
 });
