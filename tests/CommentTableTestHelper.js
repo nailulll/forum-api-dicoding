@@ -31,6 +31,7 @@ const CommentTableTestHelper = {
 
     async cleanTable() {
         await pool.query('DELETE FROM comments');
+        await new Promise(resolve => setTimeout(resolve, 100));
     },
 };
 

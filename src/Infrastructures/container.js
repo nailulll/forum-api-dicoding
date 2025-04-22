@@ -35,6 +35,7 @@ const DeleteCommentOnThreadUseCase = require("../Applications/use_case/DeleteCom
 const DetailThreadUseCase = require("../Applications/use_case/DetailThreadUseCase");
 const ReplyThreadUseCase = require("../Applications/use_case/ReplyThreadUseCase");
 const ReplyRepository = require("../Domains/replies/ReplyRepository");
+const ReplyRepositoryPostgres = require("./repository/ReplyRepositoryPostgres");
 
 // creating container
 const container = createContainer();
@@ -116,6 +117,20 @@ container.register([
             ],
         },
     },
+    {
+        key: ReplyRepository.name,
+        Class: ReplyRepositoryPostgres,
+        parameter: {
+            dependencies: [
+                {
+                    concrete: pool,
+                },
+                {
+                    concrete: nanoid,
+                },
+            ],
+        }
+    }
 ]);
 
 // registering use cases

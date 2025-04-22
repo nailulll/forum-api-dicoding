@@ -18,8 +18,8 @@ class ReplyRepositoryPostgres extends ReplyRepository {
                    VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, content, owner`,
             values: [id, commentId, content, userId, date, false],
         };
-        const result = await this._pool.query(query);
 
+        const result = await this._pool.query(query);
         return new AddedReply({...result.rows[0]});
     }
 

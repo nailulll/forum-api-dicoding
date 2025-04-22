@@ -9,10 +9,11 @@ const ReplyTableTestHelper = require("../../../../tests/ReplyTableTestHelper");
 
 describe("ThreadRepositoryPostgres", () => {
     afterEach(async () => {
+        await ReplyTableTestHelper.cleanTable();
+        await CommentsTableTestHelper.cleanTable();
         await ThreadRepositoryTestHelper.cleanTable();
         await UsersTableTestHelper.cleanTable();
-        await CommentsTableTestHelper.cleanTable();
-        await ReplyTableTestHelper.cleanTable();
+
     });
 
     afterAll(async () => {

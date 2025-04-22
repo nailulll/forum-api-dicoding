@@ -30,7 +30,7 @@ describe("ReplyThreadUseCase", () => {
 
         expect(mockThreadRepository.findThreadById).toBeCalledWith(threadId);
         expect(mockCommentRepository.findCommentById).toBeCalledWith(commentId);
-        expect(mockReplyRepository.addReply).toBeCalledWith(useCasePayload, commentId, threadId, userId);
+        expect(mockReplyRepository.addReply).toBeCalledWith(useCasePayload, commentId, userId);
         expect(reply).toStrictEqual(mockReply);
     });
 });
