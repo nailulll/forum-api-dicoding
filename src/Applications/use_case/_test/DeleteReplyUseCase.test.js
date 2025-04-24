@@ -20,7 +20,7 @@ describe("DeleteReplyUseCase", () => {
                 id: threadId,
                 title: "title",
                 body: "body",
-                username: userId,
+                owner: userId,
                 date: new Date().toISOString(),
             }));
 
@@ -30,7 +30,7 @@ describe("DeleteReplyUseCase", () => {
                 id: commentId,
                 threadId: threadId,
                 content: "content",
-                username: userId,
+                owner: userId,
                 date: new Date().toISOString(),
                 is_delete: false,
             }));
@@ -40,7 +40,7 @@ describe("DeleteReplyUseCase", () => {
                 id: replyId,
                 content: "content",
                 comment_id: commentId,
-                username: userId,
+                owner: userId,
                 date: new Date().toISOString(),
             }));
         mockReplyRepository.verifyReplyOwner = jest
@@ -49,7 +49,7 @@ describe("DeleteReplyUseCase", () => {
                 id: replyId,
                 content: "content",
                 comment_id: commentId,
-                username: userId,
+                owner: userId,
                 date: new Date().toISOString(),
             }));
         mockReplyRepository.deleteReply = jest

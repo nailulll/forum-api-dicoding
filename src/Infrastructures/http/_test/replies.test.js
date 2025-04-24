@@ -93,7 +93,7 @@ describe("replies endpoint", () => {
       });
       await ThreadRepositoryTestHelper.addThread({
         id: fakeThreadId,
-        username: "user-123",
+        owner: "user-123",
       });
 
       const response = await server.inject({
@@ -126,12 +126,12 @@ describe("replies endpoint", () => {
       });
       await ThreadRepositoryTestHelper.addThread({
         id: fakeThreadId,
-        username: "user-123",
+        owner: "user-123",
       });
       await CommentTableTestHelper.addComment({
         id: fakeCommentId,
         threadId: fakeThreadId,
-        username: "user-123",
+        owner: "user-123",
       });
 
       const response = await server.inject({
@@ -166,12 +166,12 @@ describe("replies endpoint", () => {
       });
       await ThreadRepositoryTestHelper.addThread({
         id: fakeThreadId,
-        username: "user-123",
+        owner: "user-123",
       });
       await CommentTableTestHelper.addComment({
         id: fakeCommentId,
         threadId: fakeThreadId,
-        username: "user-123",
+        owner: "user-123",
       });
 
       const response = await server.inject({
@@ -206,12 +206,12 @@ describe("replies endpoint", () => {
       });
       await ThreadRepositoryTestHelper.addThread({
         id: fakeThreadId,
-        username: "user-123",
+        owner: "user-123",
       });
       await CommentTableTestHelper.addComment({
         id: fakeCommentId,
         threadId: fakeThreadId,
-        username: "user-123",
+        owner: "user-123",
       });
 
       const response = await server.inject({
@@ -288,7 +288,7 @@ describe("replies endpoint", () => {
       });
       await ThreadRepositoryTestHelper.addThread({
         id: fakeThreadId,
-        username: "user-123",
+        owner: "user-123",
       });
 
       const response = await server.inject({
@@ -319,12 +319,12 @@ describe("replies endpoint", () => {
       });
       await ThreadRepositoryTestHelper.addThread({
         id: fakeThreadId,
-        username: "user-123",
+        owner: "user-123",
       });
       await CommentTableTestHelper.addComment({
         id: fakeCommentId,
         threadId: fakeThreadId,
-        username: "user-123",
+        owner: "user-123",
       });
 
       const response = await server.inject({
@@ -355,17 +355,17 @@ describe("replies endpoint", () => {
       });
       await ThreadRepositoryTestHelper.addThread({
         id: fakeThreadId,
-        username: "user-123",
+        owner: "user-123",
       });
       await CommentTableTestHelper.addComment({
         id: fakeCommentId,
         threadId: fakeThreadId,
-        username: "user-123",
+        owner: "user-123",
       });
       await ReplyTableTestHelper.addReply({
         id: fakeReplyId,
         commentId: fakeCommentId,
-        username: "user-123",
+        owner: "user-123",
       });
 
       const response = await server.inject({
@@ -397,12 +397,12 @@ describe("replies endpoint", () => {
       });
       await ThreadRepositoryTestHelper.addThread({
         id: fakeThreadId,
-        username: "user-123",
+        owner: "user-123",
       });
       await CommentTableTestHelper.addComment({
         id: fakeCommentId,
         threadId: fakeThreadId,
-        username: "user-123",
+        owner: "user-123",
       });
 
       const replyResponse = await server.inject({

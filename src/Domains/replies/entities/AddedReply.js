@@ -4,7 +4,7 @@ class AddedReply {
 
     this.id = props.id;
     this.content = props.content;
-    this.username = props.username;
+    this.owner = props.owner;
   }
 
   _verifyPayload(payload) {

@@ -4,7 +4,7 @@ class CreatedComment {
 
     this.id = payload.id;
     this.content = payload.content;
-    this.username = payload.username;
+    this.owner = payload.owner;
   }
 
   _verifyPayload(payload) {

@@ -161,17 +161,17 @@ describe("/threads endpoint", () => {
         title: "title",
         body: "body",
         date: "date",
-        username: userDicoding.id,
+        owner: userDicoding.id,
       };
 
       const commentUserJohnDoe = {
-        username: userJohnDoe.id,
+        owner: userJohnDoe.id,
         threadId: thread.id,
         content: "content",
         id: "comment-123",
       };
       const commentUserDicoding = {
-        username: userDicoding.id,
+        owner: userDicoding.id,
         threadId: thread.id,
         content: "content",
         id: "comment-456",

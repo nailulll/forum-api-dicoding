@@ -20,21 +20,21 @@ describe("ReplyThreadUseCase", () => {
             id: threadId,
             title: "title",
             body: "body",
-            username: userId,
+            owner: userId,
             date: new Date().toISOString(),
         }));
         mockCommentRepository.findCommentById = jest.fn().mockImplementation(() => Promise.resolve({
             id: commentId,
             threadId: threadId,
             content: "content",
-            username: userId,
+            owner: userId,
             date: new Date().toISOString(),
             is_delete: false,
         }));
         mockReplyRepository.addReply = jest.fn().mockImplementation(() => Promise.resolve(new AddedReply({
             id: "reply-123",
             content: useCasePayload.content,
-            username: userId,
+            owner: userId,
         })));
 
         const replyThreadUseCase = new ReplyThreadUseCase({
@@ -60,7 +60,7 @@ describe("ReplyThreadUseCase", () => {
         expect(reply).toStrictEqual(new AddedReply({
             id: "reply-123",
             content: useCasePayload.content,
-            username: userId,
+            owner: userId,
         }));
     });
 });
