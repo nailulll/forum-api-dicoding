@@ -16,7 +16,7 @@ describe("AddCommentUseCase", () => {
         const mockCreatedComment = new CreatedComment({
             id: "comment-123",
             content: useCasePayload.content,
-            username: userId,
+            owner: userId,
         });
 
         const mockCommentRepository = new CommentRepository();
@@ -26,7 +26,7 @@ describe("AddCommentUseCase", () => {
             id: threadId,
             title: "title",
             body: "body",
-            username: userId,
+            owner: userId,
             date: new Date().toISOString(),
         }));
         mockCommentRepository.addComment = jest.fn().mockImplementation(() => Promise.resolve(mockCreatedComment));
@@ -53,7 +53,7 @@ describe("AddCommentUseCase", () => {
         expect(createdComment).toStrictEqual(new CreatedComment({
             id: "comment-123",
             content: useCasePayload.content,
-            username: userId,
+            owner: userId,
         }));
     });
 });

@@ -1,9 +1,6 @@
 const ThreadRepository = require("../../Domains/threads/ThreadRepository");
 const CreatedThread = require("../../Domains/threads/entities/CreatedThread");
 const NotFoundError = require("../../Commons/exceptions/NotFoundError");
-const Thread = require("../../Domains/threads/entities/Thread");
-const Comment = require("../../Domains/comments/entities/Comment");
-const Reply = require("../../Domains/replies/entities/Reply");
 
 class ThreadRepositoryPostgres extends ThreadRepository {
     constructor(pool, idGenerator) {
@@ -29,7 +26,10 @@ class ThreadRepositoryPostgres extends ThreadRepository {
 
     async findThreadById(threadId) {
         const query = {
-            text: "SELECT * FROM threads WHERE id = $1",
+            text: `SELECT threads.*, users.username
+                   FROM threads
+                            JOIN users ON threads.owner = users.id
+                   WHERE threads.id = $1`,
             values: [threadId],
         };
 

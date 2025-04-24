@@ -16,7 +16,7 @@ describe("CommentRepositoryPostgres", () => {
     await UsersTableTestHelper.addUser({ id: fakeUserId });
     await ThreadTableTestHelper.addThread({
       id: fakeThreadId,
-      username: fakeUserId,
+      owner: fakeUserId,
     });
     commentRepositoryPostgres = new CommentRepositoryPostgres(
       pool,
@@ -45,7 +45,7 @@ describe("CommentRepositoryPostgres", () => {
         new CreatedComment({
           id: "comment-123",
           content: payload.content,
-          username: fakeUserId,
+          owner: fakeUserId,
         })
       );
     });
@@ -91,7 +91,7 @@ describe("CommentRepositoryPostgres", () => {
         id: addComment.id,
         thread_id: fakeThreadId,
         content: payload.content,
-        username: fakeUserId,
+        owner: fakeUserId,
         date: expect.any(String),
         is_delete: false,
       });
@@ -119,7 +119,7 @@ describe("CommentRepositoryPostgres", () => {
         id: addComment.id,
         thread_id: fakeThreadId,
         content: payload.content,
-        username: fakeUserId,
+        owner: fakeUserId,
         date: expect.any(String),
         is_delete: false,
       });

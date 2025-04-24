@@ -18,12 +18,12 @@ describe("ReplyRepositoryPostgres", () => {
         await UsersTableTestHelper.addUser({id: fakeUserId});
         await ThreadTableTestHelper.addThread({
             id: fakeThreadId,
-            username: fakeUserId,
+            owner: fakeUserId,
         });
         await CommentTableTestHelper.addComment({
             id: fakeCommentId,
             threadId: fakeThreadId,
-            username: fakeUserId,
+            owner: fakeUserId,
         });
         replyRepositoryPostgres = new ReplyRepositoryPostgres(
             pool,
@@ -53,7 +53,7 @@ describe("ReplyRepositoryPostgres", () => {
                 new AddedReply({
                     id: "reply-123",
                     content: payload.content,
-                    username: fakeUserId,
+                    owner: fakeUserId,
                 })
             );
         });
@@ -78,7 +78,7 @@ describe("ReplyRepositoryPostgres", () => {
                 id: "reply-123",
                 commentId: fakeCommentId,
                 content: payload.content,
-                username: "user-456",
+                owner: "user-456",
             });
             await expect(
                 replyRepositoryPostgres.verifyReplyOwner("reply-123", fakeUserId)
@@ -90,7 +90,7 @@ describe("ReplyRepositoryPostgres", () => {
                 id: "reply-123",
                 commentId: fakeCommentId,
                 content: payload.content,
-                username: fakeUserId,
+                owner: fakeUserId,
             });
             const reply = await replyRepositoryPostgres.verifyReplyOwner(
                 "reply-123",
@@ -100,7 +100,7 @@ describe("ReplyRepositoryPostgres", () => {
                 id: "reply-123",
                 comment_id: fakeCommentId,
                 content: payload.content,
-                username: fakeUserId,
+                owner: fakeUserId,
                 date: expect.any(String),
                 is_delete: false,
             });
@@ -113,7 +113,7 @@ describe("ReplyRepositoryPostgres", () => {
                 id: "reply-123",
                 commentId: fakeCommentId,
                 content: payload.content,
-                username: fakeUserId,
+                owner: fakeUserId,
             });
             await replyRepositoryPostgres.deleteReply("reply-123");
             const replies = await ReplyTableTestHelper.findRepliesById("reply-123");
@@ -127,7 +127,7 @@ describe("ReplyRepositoryPostgres", () => {
                 id: "reply-123",
                 commentId: fakeCommentId,
                 content: payload.content,
-                username: fakeUserId,
+                owner: fakeUserId,
             });
             const reply = await replyRepositoryPostgres.findReplyById("reply-123");
 
@@ -135,7 +135,7 @@ describe("ReplyRepositoryPostgres", () => {
                 id: "reply-123",
                 comment_id: fakeCommentId,
                 content: payload.content,
-                username: fakeUserId,
+                owner: fakeUserId,
                 date: expect.any(String),
                 is_delete: false,
             });
@@ -154,13 +154,13 @@ describe("ReplyRepositoryPostgres", () => {
                 id: "reply-123",
                 commentId: fakeCommentId,
                 content: payload.content,
-                username: fakeUserId,
+                owner: fakeUserId,
             });
             await ReplyTableTestHelper.addReply({
                 id: "reply-456",
                 commentId: fakeCommentId,
                 content: payload.content,
-                username: fakeUserId,
+                owner: fakeUserId,
             })
             const replies = await replyRepositoryPostgres.getRepliesByCommentIds([fakeCommentId]);
             expect(replies).toHaveLength(2);

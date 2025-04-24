@@ -39,7 +39,7 @@ describe("ThreadRepositoryPostgres", () => {
         new CreatedThread({
           id: "thread-123",
           title: createThread.title,
-          username: fakeUserId,
+          owner: fakeUserId,
         })
       );
     });
@@ -98,7 +98,7 @@ describe("ThreadRepositoryPostgres", () => {
         title: createThread.title,
         body: createThread.body,
         date: expect.any(String),
-        username: fakeUserId,
+        owner: fakeUserId,
       });
     });
   });
