@@ -5,7 +5,7 @@ class Comment {
     this._verifyPayload(payload);
 
     this.id = payload.id;
-    this.content = payload.content;
+    this.content = payload.is_delete ? "**komentar telah dihapus**" : payload.content;
     this.date = payload.date;
     this.username = payload.username;
     this.replies = payload.replies || [];

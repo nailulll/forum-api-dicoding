@@ -58,8 +58,8 @@ describe("Comment entity", () => {
 
   it("should create Comment entities correctly", () => {
     // Arrange
-    const payloadComment = new Reply({
-      id: "comment-123",
+    const payloadReply = new Reply({
+      id: "reply-123",
       content: "content",
       date: "2021-01-01",
       username: "user-123",
@@ -69,13 +69,39 @@ describe("Comment entity", () => {
       content: "content",
       date: "2021-01-01",
       username: "user-123",
-      replies: [payloadComment],
+      replies: [payloadReply],
     };
 
     // Action & Assert
     const comment = new Comment(payload);
     expect(comment.id).toEqual(payload.id);
     expect(comment.content).toEqual(payload.content);
+    expect(comment.date).toEqual(payload.date);
+    expect(comment.username).toEqual(payload.username);
+    expect(comment.replies).toEqual(payload.replies);
+  });
+
+  it("should create Comment entities correctly but reply is deleted", () => {
+    // Arrange
+    const payloadReply = new Reply({
+      id: "reply-123",
+      content: "content",
+      date: "2021-01-01",
+      username: "user-123",
+    });
+    const payload = {
+      id: "comment-123",
+      content: "content",
+      date: "2021-01-01",
+      username: "user-123",
+      is_delete: true,
+      replies: [payloadReply],
+    };
+
+    // Action & Assert
+    const comment = new Comment(payload);
+    expect(comment.id).toEqual(payload.id);
+    expect(comment.content).toEqual("**komentar telah dihapus**");
     expect(comment.date).toEqual(payload.date);
     expect(comment.username).toEqual(payload.username);
     expect(comment.replies).toEqual(payload.replies);
