@@ -15,7 +15,7 @@ describe("AddThreadUseCase", () => {
         const mockCreatedThread = new CreatedThread({
             id: "thread-123",
             title: useCasePayload.title,
-            owner: userId,
+            username: userId,
         });
 
         const mockThreadRepository = new ThreadRepository();
@@ -39,7 +39,7 @@ describe("AddThreadUseCase", () => {
             new CreatedThread({
                 id: "thread-123",
                 title: useCasePayload.title,
-                owner: userId,
+                username: userId,
             })
         );
     });

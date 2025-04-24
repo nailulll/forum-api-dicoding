@@ -4,7 +4,7 @@ class CreatedThread {
 
     this.id = payload.id;
     this.title = payload.title;
-    this.owner = payload.owner;
+    this.username = payload.username;
   }
 
   _verifyPayload(payload) {
