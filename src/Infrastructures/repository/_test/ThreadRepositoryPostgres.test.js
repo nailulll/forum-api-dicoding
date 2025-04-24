@@ -99,6 +99,7 @@ describe("ThreadRepositoryPostgres", () => {
         body: createThread.body,
         date: expect.any(String),
         owner: fakeUserId,
+        username: "dicoding",
       });
     });
   });
