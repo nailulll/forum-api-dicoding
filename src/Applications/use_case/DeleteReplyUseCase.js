@@ -10,7 +10,7 @@ class DeleteReplyUseCase {
     await this._commentRepository.findCommentById(commentId);
     await this._replyRepository.findReplyById(replyId);
     await this._replyRepository.verifyReplyOwner(replyId, userId);
-    return await this._replyRepository.deleteReply(replyId);
+    await this._replyRepository.deleteReply(replyId);
   }
 }
 

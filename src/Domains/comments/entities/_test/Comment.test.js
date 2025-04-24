@@ -78,5 +78,6 @@ describe("Comment entity", () => {
     expect(comment.content).toEqual(payload.content);
     expect(comment.date).toEqual(payload.date);
     expect(comment.username).toEqual(payload.username);
+    expect(comment.replies).toEqual(payload.replies);
   });
 });
