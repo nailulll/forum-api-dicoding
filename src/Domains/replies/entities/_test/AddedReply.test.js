@@ -12,7 +12,7 @@ describe("AddedReply entity", () => {
     const payload = {
       id: "reply-123",
       content: 123,
-      owner: "user-123",
+      username: "user-123",
     };
 
     // Action & Assert
@@ -26,13 +26,13 @@ describe("AddedReply entity", () => {
     const payload = {
       id: "reply-123",
       content: "content",
-      owner: "user-123",
+      username: "user-123",
     };
 
     // Action & Assert
     const addedReply = new AddedReply(payload);
     expect(addedReply.id).toEqual(payload.id);
     expect(addedReply.content).toEqual(payload.content);
-    expect(addedReply.owner).toEqual(payload.owner);
+    expect(addedReply.username).toEqual(payload.username);
   });
 });

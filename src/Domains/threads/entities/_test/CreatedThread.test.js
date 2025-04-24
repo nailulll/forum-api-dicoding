@@ -4,7 +4,7 @@ describe("CreatedThread entity", () => {
     // Arrange
     const payload = {
       title: "title",
-      owner: "owner",
+      username: "owner",
     };
 
     // Action & Assert
@@ -18,7 +18,7 @@ describe("CreatedThread entity", () => {
     const payload = {
       id: 123,
       title: "title",
-      owner: "owner",
+      username: "owner",
     };
 
     // Action & Assert
@@ -32,7 +32,7 @@ describe("CreatedThread entity", () => {
     const payload = {
       id: "thread-123",
       title: "title",
-      owner: "owner",
+      username: "owner",
     };
 
     // Action
@@ -42,6 +42,6 @@ describe("CreatedThread entity", () => {
     expect(createdThread).toBeInstanceOf(CreatedThread);
     expect(createdThread.id).toEqual(payload.id);
     expect(createdThread.title).toEqual(payload.title);
-    expect(createdThread.owner).toEqual(payload.owner);
+    expect(createdThread.username).toEqual(payload.username);
   });
 });

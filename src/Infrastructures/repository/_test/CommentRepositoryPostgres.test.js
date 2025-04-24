@@ -4,7 +4,6 @@ const CommentTableTestHelper = require("../../../../tests/CommentTableTestHelper
 const pool = require("../../database/postgres/pool");
 const CommentRepositoryPostgres = require("../CommentRepositoryPostgres");
 const CreatedComment = require("../../../Domains/comments/entities/CreatedComment");
-const AddedReply = require("../../../Domains/replies/entities/AddedReply");
 
 describe("CommentRepositoryPostgres", () => {
   const fakeIdGenerator = () => "123";
@@ -17,7 +16,7 @@ describe("CommentRepositoryPostgres", () => {
     await UsersTableTestHelper.addUser({ id: fakeUserId });
     await ThreadTableTestHelper.addThread({
       id: fakeThreadId,
-      owner: fakeUserId,
+      username: fakeUserId,
     });
     commentRepositoryPostgres = new CommentRepositoryPostgres(
       pool,
@@ -36,7 +35,7 @@ describe("CommentRepositoryPostgres", () => {
   });
 
   describe("addComment function", () => {
-    it("should add comment correctly", async () => {
+    it("should return add comment correctly", async () => {
       const comment = await commentRepositoryPostgres.addComment(
         payload,
         fakeThreadId,
@@ -46,9 +45,20 @@ describe("CommentRepositoryPostgres", () => {
         new CreatedComment({
           id: "comment-123",
           content: payload.content,
-          owner: fakeUserId,
+          username: fakeUserId,
         })
       );
+    });
+    it("should persist add comment", async () => {
+      await commentRepositoryPostgres.addComment(
+        payload,
+        fakeThreadId,
+        fakeUserId
+      );
+      const comment = await CommentTableTestHelper.findCommentsById(
+        "comment-123"
+      );
+      expect(comment).toHaveLength(1);
     });
   });
 
@@ -77,10 +87,14 @@ describe("CommentRepositoryPostgres", () => {
       const comment = await commentRepositoryPostgres.findCommentById(
         addComment.id
       );
-      const commentById = await CommentTableTestHelper.findCommentsById(
-        addComment.id
-      );
-      await expect(comment).toStrictEqual(commentById[0]);
+      expect(comment).toStrictEqual({
+        id: addComment.id,
+        thread_id: fakeThreadId,
+        content: payload.content,
+        username: fakeUserId,
+        date: expect.any(String),
+        is_delete: false,
+      });
     });
 
     it("should throw NotFoundError when comment not found", async () => {
@@ -101,10 +115,14 @@ describe("CommentRepositoryPostgres", () => {
         addComment.id,
         fakeUserId
       );
-      const commentById = await CommentTableTestHelper.findCommentsById(
-        addComment.id
-      );
-      await expect(comment).toStrictEqual(commentById[0]);
+      await expect(comment).toStrictEqual({
+        id: addComment.id,
+        thread_id: fakeThreadId,
+        content: payload.content,
+        username: fakeUserId,
+        date: expect.any(String),
+        is_delete: false,
+      });
     });
 
     it("should throw AuthorizationError when comment not owner", async () => {
@@ -125,5 +143,33 @@ describe("CommentRepositoryPostgres", () => {
         )
       ).rejects.toThrowError("anda tidak berhak mengakses resource ini");
     });
+  });
+
+  describe("getCommentsByThreadId function", () => {
+    it("should return comments correctly", async () => {
+      await commentRepositoryPostgres.addComment(
+        payload,
+        fakeThreadId,
+        fakeUserId
+      );
+      const comments = await commentRepositoryPostgres.getCommentsByThreadId(
+        fakeThreadId
+      );
+
+      expect(comments).toHaveLength(1);
+      expect(comments[0]).toStrictEqual({
+        id: expect.any(String),
+        content: payload.content,
+        username: "dicoding",
+        date: expect.any(String),
+        is_delete: false,
+      })
+    });
+
+    it("should return empty array when thread has no comments", async () => {
+      const comments = await commentRepositoryPostgres.getCommentsByThreadId("thread-xyz");
+      expect(comments).toHaveLength(0);
+      expect(comments).toStrictEqual([]);
+    })
   });
 });

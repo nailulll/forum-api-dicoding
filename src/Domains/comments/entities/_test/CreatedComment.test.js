@@ -18,7 +18,7 @@ describe("CreatedComment entity", () => {
     const payload = {
       id: "comment-123",
       content: 123,
-      owner: "user-123",
+      username: "user-123",
     };
 
     // Action & Assert
@@ -32,13 +32,13 @@ describe("CreatedComment entity", () => {
     const payload = {
       id: "comment-123",
       content: "content",
-      owner: "user-123",
+      username: "user-123",
     };
 
     // Action & Assert
     const createdComment = new CreatedComment(payload);
     expect(createdComment.id).toEqual(payload.id);
     expect(createdComment.content).toEqual(payload.content);
-    expect(createdComment.owner).toEqual(payload.owner);
+    expect(createdComment.username).toEqual(payload.username);
   });
 });
