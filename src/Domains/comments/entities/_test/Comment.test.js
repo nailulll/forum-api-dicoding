@@ -106,4 +106,36 @@ describe("Comment entity", () => {
     expect(comment.username).toEqual(payload.username);
     expect(comment.replies).toEqual(payload.replies);
   });
+
+  it("should create Comment entities with their replies correctly using createWithReplies", () => {
+    const commentsRaw = [
+      {
+        id: "comment-1",
+        content: "comment content",
+        date: "2021-01-01",
+        username: "user1",
+        is_delete: false,
+      },
+    ];
+
+    const repliesRaw = [
+      {
+        id: "reply-1",
+        content: "reply content",
+        date: "2021-01-02",
+        username: "user2",
+        is_delete: false,
+        comment_id: "comment-1",
+      },
+    ];
+
+    const result = Comment.createWithReplies(commentsRaw, repliesRaw);
+
+    expect(result).toHaveLength(1);
+    expect(result[0]).toBeInstanceOf(Comment);
+    expect(result[0].replies).toHaveLength(1);
+    expect(result[0].replies[0]).toBeInstanceOf(Reply);
+    expect(result[0].replies[0].id).toBe("reply-1");
+  });
+
 });

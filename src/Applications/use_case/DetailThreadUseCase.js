@@ -14,28 +14,7 @@ class DetailThreadUseCase {
         const commentsRaw = await this._commentRepository.getCommentsByThreadId(threadId);
         const commentIds = commentsRaw.map((c) => c.id);
         const repliesRaw = await this._replyRepository.getRepliesByCommentIds(commentIds);
-
-        const comments = commentsRaw.map((comment) => {
-            const replies = repliesRaw
-                .filter((reply) => reply.comment_id === comment.id)
-                .map((reply) => new Reply({
-                    id: reply.id,
-                    content: reply.content,
-                    date: reply.date,
-                    username: reply.username,
-                    is_delete: reply.is_delete
-                }));
-
-            return new Comment({
-                id: comment.id,
-                content: comment.content,
-                date: comment.date,
-                username: comment.username,
-                is_delete: comment.is_delete,
-                replies,
-            });
-        });
-
+        const comments = Comment.createWithReplies(commentsRaw, repliesRaw);
 
         return new Thread({
             id: thread.id,
