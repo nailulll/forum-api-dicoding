@@ -135,7 +135,19 @@ describe("Comment entity", () => {
     expect(result[0]).toBeInstanceOf(Comment);
     expect(result[0].replies).toHaveLength(1);
     expect(result[0].replies[0]).toBeInstanceOf(Reply);
-    expect(result[0].replies[0].id).toBe("reply-1");
+
+    // Assert all properties of the comment
+    expect(result[0].id).toBe(commentsRaw[0].id);
+    expect(result[0].content).toBe(commentsRaw[0].content);
+    expect(result[0].date).toBe(commentsRaw[0].date);
+    expect(result[0].username).toBe(commentsRaw[0].username);
+
+    // Assert all properties of the reply
+    expect(result[0].replies[0].id).toBe(repliesRaw[0].id);
+    expect(result[0].replies[0].content).toBe(repliesRaw[0].content);
+    expect(result[0].replies[0].date).toBe(repliesRaw[0].date);
+    expect(result[0].replies[0].username).toBe(repliesRaw[0].username);
   });
+
 
 });
