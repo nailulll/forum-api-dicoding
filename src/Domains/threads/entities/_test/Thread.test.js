@@ -49,6 +49,7 @@ describe("Thread entity", () => {
       content: "content",
       date: "date",
       username: "username",
+      likeCount: 0,
     });
 
     // Arrange

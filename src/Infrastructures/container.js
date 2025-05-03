@@ -18,6 +18,7 @@ const ThreadRepositoryPostgres = require("./repository/ThreadRepositoryPostgres"
 const ThreadRepository = require("../Domains/threads/ThreadRepository");
 const CommentRepositoryPostgres = require("./repository/CommentRepositoryPostgres");
 const CommentRepository = require("../Domains/comments/CommentRepository");
+const LikeCommentRepository = require("../Domains/like_comments/LikeCommentRepository");
 
 // use case
 const AddUserUseCase = require("../Applications/use_case/AddUserUseCase");
@@ -37,6 +38,8 @@ const ReplyThreadUseCase = require("../Applications/use_case/ReplyThreadUseCase"
 const ReplyRepository = require("../Domains/replies/ReplyRepository");
 const ReplyRepositoryPostgres = require("./repository/ReplyRepositoryPostgres");
 const DeleteReplyUseCase = require("../Applications/use_case/DeleteReplyUseCase");
+const LikeCommentRepositoryPostgres = require("./repository/LikeCommentRepositoryPostgres");
+const LikeCommentUseCase = require("../Applications/use_case/LikeCommentUseCase");
 
 // creating container
 const container = createContainer();
@@ -132,6 +135,20 @@ container.register([
       ],
     },
   },
+  {
+    key: LikeCommentRepository.name,
+    Class: LikeCommentRepositoryPostgres,
+    parameter: {
+      dependencies: [
+        {
+          concrete: pool,
+        },
+        {
+          concrete: nanoid,
+        },
+      ],
+    },
+  }
 ]);
 
 // registering use cases
@@ -273,6 +290,10 @@ container.register([
           name: "replyRepository",
           internal: ReplyRepository.name,
         },
+        {
+          name: "likeCommentRepository",
+          internal: LikeCommentRepository.name,
+        },
       ],
     },
   },
@@ -318,6 +339,27 @@ container.register([
       ],
     },
   },
+  {
+    key: LikeCommentUseCase.name,
+    Class: LikeCommentUseCase,
+    parameter: {
+      injectType: "destructuring",
+      dependencies: [
+        {
+          name: "commentRepository",
+          internal: CommentRepository.name,
+        },
+        {
+          name: "likeCommentRepository",
+          internal: LikeCommentRepository.name,
+        },
+        {
+          name: "threadRepository",
+          internal: ThreadRepository.name,
+        },
+      ],
+    },
+  }
 ]);
 
 module.exports = container;

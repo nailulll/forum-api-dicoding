@@ -5,13 +5,15 @@ const createServer = require("../createServer");
 const container = require("../../container");
 const CommentsTableTestHelper = require("../../../../tests/CommentTableTestHelper");
 const RepliesTableTestHelper = require("../../../../tests/ReplyTableTestHelper");
+const LikeCommentTableTestHelper = require("../../../../tests/LikeCommentTableTestHelper");
 
 describe("/threads endpoint", () => {
     afterEach(async () => {
+        await RepliesTableTestHelper.cleanTable();
+        await LikeCommentTableTestHelper.cleanTable();
+        await CommentsTableTestHelper.cleanTable();
         await ThreadRepositoryTestHelper.cleanTable();
         await UsersTableTestHelper.cleanTable();
-        await CommentsTableTestHelper.cleanTable();
-        await RepliesTableTestHelper.cleanTable();
     });
 
     afterAll(async () => {
@@ -212,6 +214,10 @@ describe("/threads endpoint", () => {
             });
             await RepliesTableTestHelper.deleteReplyById("reply-456");
 
+            await LikeCommentTableTestHelper.addLikeComment({
+                commentId: commentUserJohnDoe.id,
+                userId: userJohnDoe.id,
+            });
 
             const response = await server.inject({
                 method: "GET",
@@ -234,6 +240,7 @@ describe("/threads endpoint", () => {
                         content: commentUserJohnDoe.content,
                         username: userJohnDoe.username,
                         date: expect.any(String),
+                        likeCount: 1,
                         replies: expect.arrayContaining([
                             expect.objectContaining({
                                 id: "reply-456",
@@ -254,6 +261,7 @@ describe("/threads endpoint", () => {
                         content: "**komentar telah dihapus**",
                         username: userDicoding.username,
                         date: expect.any(String),
+                        likeCount: 0,
                     }),
                 ]),
             });
