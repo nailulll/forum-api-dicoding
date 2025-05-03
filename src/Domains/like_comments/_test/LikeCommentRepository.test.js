@@ -15,5 +15,10 @@ describe("LikeCommentRepository interface", () => {
         await expect(likeCommentRepository.findLikeComment(null, null)).rejects.toThrowError(
             "LIKE_COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED"
         );
+        await expect(
+            likeCommentRepository.getLikesByCommentIds([])
+        ).rejects.toThrowError(
+            "LIKE_COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED"
+        );
     });
 });

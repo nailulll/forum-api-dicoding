@@ -82,4 +82,23 @@ describe("LikeCommentRepositoryPostgres", () => {
         });
     });
 
+    describe("getLikesByCommentIds function", () => {
+        it("should return likes correctly", async () => {
+            const likeId = "like-123";
+            await LikeCommentTableTestHelper.addLikeComment({
+                id: likeId,
+                commentId: fakeCommentId,
+                userId: fakeUserId
+            });
+            const likes = await likeCommentRepositoryPostgres.getLikesByCommentIds([fakeCommentId]);
+            expect(likes).toHaveLength(1);
+            expect(likes[0]).toStrictEqual({
+                id: likeId,
+                comment_id: fakeCommentId,
+                owner: fakeUserId,
+                date: expect.any(String),
+            });
+        });
+    });
+
 });

@@ -16,6 +16,7 @@ describe("Comment entity", () => {
       content: 123,
       date: "2021-01-01",
       username: "user-123",
+      likeCount: "10",
     };
 
     // Action & Assert
@@ -32,6 +33,7 @@ describe("Comment entity", () => {
       date: "2021-01-01",
       username: "user-123",
       replies: "replies",
+      likeCount: 10,
     };
 
     // Action & Assert
@@ -47,6 +49,7 @@ describe("Comment entity", () => {
       content: "content",
       date: "2021-01-01",
       username: "user-123",
+      likeCount: 10,
       replies: [{}],
     };
 
@@ -69,6 +72,7 @@ describe("Comment entity", () => {
       content: "content",
       date: "2021-01-01",
       username: "user-123",
+      likeCount: 10,
       replies: [payloadReply],
     };
 
@@ -95,6 +99,7 @@ describe("Comment entity", () => {
       date: "2021-01-01",
       username: "user-123",
       is_delete: true,
+      likeCount: 10,
       replies: [payloadReply],
     };
 
@@ -108,6 +113,14 @@ describe("Comment entity", () => {
   });
 
   it("should create Comment entities with their replies correctly using createWithReplies", () => {
+
+    const likedCommentsRaw = [{
+      id: "like-1",
+      comment_id: "comment-1",
+      owner: "user1",
+      date: "date",
+    }];
+
     const commentsRaw = [
       {
         id: "comment-1",
@@ -115,6 +128,7 @@ describe("Comment entity", () => {
         date: "2021-01-01",
         username: "user1",
         is_delete: false,
+        likeCount: likedCommentsRaw.length,
       },
     ];
 
@@ -129,7 +143,7 @@ describe("Comment entity", () => {
       },
     ];
 
-    const result = Comment.createWithReplies(commentsRaw, repliesRaw);
+    const result = Comment.createWithReplies(commentsRaw, repliesRaw, likedCommentsRaw);
 
     expect(result).toHaveLength(1);
     expect(result[0]).toBeInstanceOf(Comment);

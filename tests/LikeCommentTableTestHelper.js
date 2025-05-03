@@ -22,6 +22,11 @@ const LikeCommentTableTestHelper = {
         return result.rows;
     },
 
+    async getAll() {
+        const result = await pool.query('SELECT * FROM like_comments');
+        return result.rows;
+    },
+
     async cleanTable() {
         await pool.query('DELETE FROM like_comments');
     },
